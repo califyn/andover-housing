@@ -34,6 +34,12 @@ body {
     font-family: cardo;
     padding-left: 50px;
     padding-right: 50px;
+
+    --primary-color: #751104;
+    --primary-color-lite: #edb0a8;
+    --secondary-color: #220475;
+    --body-color: #000;
+    --background-color: #fff;
 }
 
 #main {
@@ -45,4 +51,40 @@ body {
 h1 {
     font-family: bebasneue;
     font-size: 60px;
+}
+
+.byline {
+    line-height: 100%;
+    font-size: 20px;
+    color: #888;
+    text-indent: 0;
+}
+
+h3 {
+    font-variant: small-caps;
+    letter-spacing: 3px;
+    font-size: 20px;
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+p {
+    color: var(--body-color);
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    text-indent: 20px;
+}
+
+a {
+    color: var(--body-color);
+    text-underline-offset: 0.1em;
+    text-decoration-height: 4px;
+    display: inline-block;
+
+    text-decoration-color: var(--primary-color);
+}
+
+a:hover {
+    text-decoration-color: var(--secondary-color);
+    background-color: var(--background-color);
 }
