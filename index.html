@@ -3,30 +3,46 @@
     <head>
         <title>PA Housing</title>
         <link rel="stylesheet" href="index.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="index.js"></script>
     </head>
     <body>
         <div id="main">
-            <img src="assets/flag_pole.jpg" style="width: 100%; margin-top: 30px; margin-bottom: 30px" />
+            <div id="splashwrap">
+                <img src="assets/splash-1-min.svg" id='splash'/>
+            </div>
 
-            <h1 style="margin-top: 0px; margin-bottom: 0px">Housing at Phillips Academy</h1>
+            <div id="titlewrap">
+                <h1 style="margin-top: 0px; margin-bottom: 0px; background-color: #FFF;">
+                    <span class="titlebg">
+                        Housing at Phillips Academy
+                    </span>
+                </h1>
+            </div>
 
             <p style="margin-top: -6px" class="byline"><font style="font-variant: small-caps">adya chatterjee &centerdot; alexa vinton &centerdot; alexandra koch-liu &centerdot; ali cy &centerdot; ralph lam &centerdot; sabby clemmons &centerdot; nicholas zufelt &centerdot;</font> <a href="#" style="text-indent:0"><i>about us</i></a></p>
 
             <p>Humans need bias as much as they need oxygen. Having biases is, quite literally, wired into our brains. From making trivial decisions&mdash;such as choosing between fruits&mdash;to debating over grand socio&#45;political issues, bias accompanies us every step of the way, even when we don&apos;t notice it. The dorm assignment process, and the general makeup of dorms, at Andover has undergone many changes, yet the student body believes that there are still strong stereotypes associated with each dorm and that those stereotypes are enforced by the administration. In our investigation, we examine student misconceptions about the housing process and gain insight from housing faculty at other boarding schools: do schools&apos; administration truly have the agendas that students believe them to possess? Our project hopes to answer this question and aims to find places in which bias&mdash;conscious or unconscious&mdash;may operate within the current dorm assignment system at Andover.</p>
+
+            <h2>Through the years</h2>
+            
+            <i>Trace the evolution of a single dorm by selecting it below.</i>
+
+            <div id="through-the-years">
+                <svg id="tty-svg" width="100%" height="500" />
+            </div>
             
             <h3>color palette</h3>
             
             <p>This is currently a draft... Changes can be made.</p>
 
-            <p style="background-color: #751104; padding: 10px; color: #fff">primary color: #751104</p>
+            <p style="background-color: #e27d60; padding: 10px; color: #fff">primary color: #e27d60</p>
 
-            <p style="background-color: #220475; padding: 10px; color: #fff">secondary color: #220475</p>
+            <p style="background-color: #85d0cb; padding: 10px; color: #fff">secondary color: #85d0cb</p>
 
-            <p style="background-color: #fff129; padding: 10px; color: #000">tertiary color: #fff129</p>
+            <p style="background-color: #e8a87c; padding: 10px; color: #000">tertiary color: #e8a87c</p>
 
-            <p style="background-color: #ababab; padding: 10px; color: #000">tertiary color: #ababab</p>
-
-            <p style="background-color: #edb0a8; padding: 10px; color: #fff">primary color (light): #edb0a8</p>
+            <p style="background-color: #41b3a3; padding: 10px; color: #000">tertiary color: #41b3a3</p>
 
         </div>
     </body>
