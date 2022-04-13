@@ -115,3 +115,12 @@ a:hover {
     text-decoration-color: var(--secondary-color);
     background-color: var(--background-color);
 }
+
+#through-the-years {
+    position: relative;
+}
+
+.helper {
+    position: absolute;
+    color: #888;
+}
