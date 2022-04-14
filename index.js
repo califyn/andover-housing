@@ -434,4 +434,180 @@ function drawTTY() {
     console.log(connectors);
 }
 
-window.onload = drawTTY;
+function drawCHS() {
+    const svg = d3.select('#chs-svg');
+    svg.selectAll("*").remove();
+    var grade_x = 80;
+    var y_space = 80;
+    var opt_y = 55;
+    var opt_x = 180;
+    var x_space = 150;
+    var previousY = opt_y + 25;
+    var colYs = [];
+    var rowXs = [];
+    var year_nicks = ["Freshmen", "Lowers", "Uppers", "Seniors"];
+    var opts = ["9/10 Dorms", "11/12 Dorms", "Stacks"];
+    for (var i = 9; i < 13; i++) {
+        colYs.push(previousY);
+        svg.append("text")
+            .attr('text-anchor', 'end')
+            .text(i + '')
+            .attr('font-size', '24pt')
+            .attr("x", grade_x)
+            .attr("y", previousY);
+        svg.append("text")
+            .attr('text-anchor', 'end')
+            .text(year_nicks[i - 9])
+            .attr('fill', '#888')
+            .attr('x', grade_x)
+            .attr('y', previousY + 20);
+        previousY += y_space;
+    }
+    var previousX = opt_x;
+    for (var i = 0; i < 3; i++) {
+        rowXs.push(previousX);
+        svg.append("text")
+            .text(opts[i])
+            .attr('text-anchor', 'middle')
+            .attr('x', previousX)
+            .attr('y', 20); 
+        previousX += x_space;
+    }
+    /*for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 4; j++) {
+            svg.append("rect")
+                .attr("x", rowXs[i] - 70)
+                .attr("y", colYs[j] - 40)
+                .attr("width", x_space - 10)
+                .attr("height", y_space - 10);
+        }
+    }*/
+    // 9th graders
+    svg.append("rect")
+        .attr("x", rowXs[0] - 70)
+        .attr("y", colYs[0] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#e27d60');
+    svg.append("text")
+        .attr("x", rowXs[0] - 75 + x_space / 2)
+        .attr("y", colYs[0] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Placed randomly");
+
+    // 10th graders
+    svg.append("rect")
+        .attr("x", rowXs[0] - 70)
+        .attr("y", colYs[1] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#e27d60');
+    svg.append("text")
+        .attr("x", rowXs[0] - 75 + x_space / 2)
+        .attr("y", colYs[1] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Same dorm");
+
+    // 11th graders
+    svg.append("rect")
+        .attr("x", rowXs[0] - 70)
+        .attr("y", colYs[2] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#e8a87c');
+    svg.append("text")
+        .attr("x", rowXs[0] - 75 + x_space / 2)
+        .attr("y", colYs[2] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Prefect");
+    svg.append("rect")
+        .attr("x", rowXs[1] - 70)
+        .attr("y", colYs[2] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#85d0cb');
+    svg.append("text")
+        .attr("x", rowXs[1] - 75 + x_space / 2)
+        .attr("y", colYs[2] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("With friends");
+    svg.append("rect")
+        .attr("x", rowXs[2] - 70)
+        .attr("y", colYs[2] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#c38d9e');
+    svg.append("text")
+        .attr("x", rowXs[2] - 75 + x_space / 2)
+        .attr("y", colYs[2] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Apply");
+
+    // 12th graders
+    svg.append("rect")
+        .attr("x", rowXs[0] - 70)
+        .attr("y", colYs[3] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#e8a87c');
+    svg.append("text")
+        .attr("x", rowXs[0] - 75 + x_space / 2)
+        .attr("y", colYs[3] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Prefect");
+    svg.append("rect")
+        .attr("x", rowXs[1] - 70)
+        .attr("y", colYs[3] - 40)
+        .attr("width", x_space / 3 - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#85d0cb');
+    var tt = svg.append("text")
+        .attr("x", rowXs[1] - 75 + x_space / 6)
+        .attr("y", colYs[3] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Same");
+    var centre = tt.node().getBBox();
+    tt.attr("transform", 'rotate(-90, ' + (centre.x + centre.width / 2) + ', ' + (centre.y + centre.height / 2) + ")");
+    svg.append("rect")
+        .attr("x", rowXs[1] - 70 + x_space / 3)
+        .attr("y", colYs[3] - 40)
+        .attr("width", x_space / 3 - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#85d0cb');
+    var tt = svg.append("text")
+        .attr("x", rowXs[1] - 75 + x_space / 2)
+        .attr("y", colYs[3] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Proctor");
+    var centre = tt.node().getBBox();
+    tt.attr("transform", 'rotate(-90, ' + (centre.x + centre.width / 2) + ', ' + (centre.y + centre.height / 2) + ")");
+    svg.append("rect")
+        .attr("x", rowXs[1] - 70 + 2 * x_space / 3)
+        .attr("y", colYs[3] - 40)
+        .attr("width", x_space / 3 - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#41b3a3');
+    var tt = svg.append("text")
+        .attr("x", rowXs[1] - 75 + 5 * x_space / 6)
+        .attr("y", colYs[3] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Change");
+    var centre = tt.node().getBBox();
+    tt.attr("transform", 'rotate(-90, ' + (centre.x + centre.width / 2) + ', ' + (centre.y + centre.height / 2) + ")");
+    svg.append("rect")
+        .attr("x", rowXs[2] - 70)
+        .attr("y", colYs[3] - 40)
+        .attr("width", x_space - 10)
+        .attr("height", y_space - 10)
+        .attr('fill', '#c38d9e');
+    svg.append("text")
+        .attr("x", rowXs[2] - 75 + x_space / 2)
+        .attr("y", colYs[3] - 40 + y_space / 2)
+        .attr('text-anchor', 'middle')
+        .text("Apply");
+}
+
+window.onload = function () {
+    drawCHS();
+    drawTTY();
+}
