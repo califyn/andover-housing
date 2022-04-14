@@ -701,9 +701,10 @@ function drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props
             .attr('class', unique + "-" + opt_names[i] + '-toggle')
             .style("stroke", "black")
             .attr("stroke-width", "1.5px")
-            .style('fill', 'none')
+            .style('fill', 'white')
             .attr('d', p)
             .attr('visibility', 'hidden');
+        label.raise();
         
         cum_sum += props[i];
     }
@@ -725,11 +726,20 @@ function drawPOC() {
         .attr('x', width * 0.95)
         .attr('y', height - 20);
     svg.append("text")
+        .text("from the survey")
+        .attr('font-weight', '400')
+        .attr('font-size', '13pt')
+        .attr('fill', '#333')
+        .attr('text-anchor', 'end')
+        .attr('x', width)
+        .attr('y', height - 20)
+        .call(wrap, width - 50);
+    svg.append("text")
         .text("Do you think the dorm you live in influences how you are perceived on campus?")
         .attr('font-weight', '700')
         .attr('font-size', '18pt')
         .attr('x', 0)
-        .attr('y', 40)
+        .attr('y', 50)
         .call(wrap, width - 50);
 
     var barY = 100;
@@ -743,8 +753,51 @@ function drawPOC() {
     drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'poc');
 }
 
+function drawIFG() {
+    const svg = d3.select('#ifg-svg');
+    svg.selectAll("*").remove();
+    var width = svg.node().getBoundingClientRect().width;
+    var height = svg.node().getBoundingClientRect().height;
+
+    svg.append("text")
+        .text("?")
+        .attr('font-weight', '700')
+        .attr('font-size', '150pt')
+        .attr('font-family', 'bebasneue')
+        .attr('text-anchor', 'end')
+        .attr('fill', '#ddd')
+        .attr('x', width * 0.95)
+        .attr('y', height - 20);
+    svg.append("text")
+        .text("from the survey")
+        .attr('font-weight', '400')
+        .attr('font-size', '13pt')
+        .attr('fill', '#333')
+        .attr('text-anchor', 'end')
+        .attr('x', width)
+        .attr('y', height - 20)
+        .call(wrap, width - 50);
+    svg.append("text")
+        .text("Do you think the dorm you live in influences friends/social circles?")
+        .attr('font-weight', '700')
+        .attr('font-size', '18pt')
+        .attr('x', 0)
+        .attr('y', 50)
+        .call(wrap, width - 50);
+
+    var barY = 100;
+    var barH = 50;
+    var bar_left = 1.5;
+    var bar_right = width - 1.5;
+
+    var opt_names = ["Yes", "Somewhat", "No"];
+    var show = [true, false, true];
+    var props = [0.84, 0.06, 0.10];
+    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'poc');
+}
 window.onload = function () {
     drawCHS();
     drawTTY();
     drawPOC();
+    drawIFG();
 }
