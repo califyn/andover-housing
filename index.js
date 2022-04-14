@@ -1,3 +1,36 @@
+function wrap(text, width) {
+    text.each(function () {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            x = text.attr("x"),
+            y = text.attr("y"),
+            dy = 0, //parseFloat(text.attr("dy")),
+            tspan = text.text(null)
+                        .append("tspan")
+                        .attr("x", x)
+                        .attr("y", y)
+                        .attr("dy", dy + "em");
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text.append("tspan")
+                            .attr("x", x)
+                            .attr("y", y)
+                            .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                            .text(word);
+            }
+        }
+    });
+}
+
 var splash_id = 1;
 var internal_count = 0;
 function toggleSplash() {
@@ -607,7 +640,111 @@ function drawCHS() {
         .text("Apply");
 }
 
+function toggleBar(elem, to) {
+    if (to == 'on') {
+        d3.selectAll('.' + elem.attr('class') + '-toggle').attr('visibility', 'visible');
+    } else {
+        d3.selectAll('.' + elem.attr('class') + '-toggle').attr('visibility', 'hidden');
+    }
+}
+
+function drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, unique) {
+    var cum_sum = 0;
+    var cols = ["#e27d60", "#85d0cb", "#e8a87c", "#c38d9e", "#41b3a3"];
+    var bar_elem = svg.append('g');
+    for (var i = 0; i < props.length; i++) {
+        bar_elem.append("rect")
+            .attr('class', unique + "-" + opt_names[i])
+            .attr("x", bar_left + (bar_right - bar_left) * cum_sum)
+            .attr("y", barY)
+            .attr("width", (bar_right - bar_left) * props[i])
+            .attr("height", barH)
+            .attr("fill", cols[i % cols.length])
+            .attr('stroke', 'black')
+            .attr('stroke-width', '0px')
+            .on('mouseover', function () {
+                d3.select(this).attr('stroke-width', '1.5px').raise();
+                toggleBar(d3.select(this), 'on');
+            }).on('mouseout', function () {
+                d3.select(this).attr('stroke-width', '0px').lower();
+                toggleBar(d3.select(this), 'off'); 
+            });
+        if (show[i]) {
+            svg.append("text")
+                .attr("x", bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2))
+                .attr("y", barY + barH / 2 + 5)
+                .attr('font-family', 'bebasneue')
+                .attr("text-anchor", 'middle')
+                .text(opt_names[i]);
+        }
+
+        var label = svg.append("text")
+            .attr('class', unique + "-" + opt_names[i] + '-toggle')
+            .text(opt_names[i] + ": " + Math.round(props[i] * 100) + '%')
+            .attr("x", bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2))
+            .attr("y", barY + barH + 30)
+            .attr("text-anchor", "middle")
+            .attr('visibility', 'hidden');
+        var bbox = label.node().getBBox();
+        var p = d3.path();
+        var bx = bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2);
+        var by = barY + barH;
+        p.moveTo(bx, by);
+        p.lineTo(bx - 5, bbox.y);
+        p.lineTo(bbox.x - 5, bbox.y);
+        p.lineTo(bbox.x - 5, bbox.y + bbox.height);
+        p.lineTo(bbox.x + bbox.width + 5, bbox.y + bbox.height);
+        p.lineTo(bbox.x + bbox.width + 5, bbox.y);
+        p.lineTo(bx + 5, bbox.y);
+        p.lineTo(bx, by);
+        svg.append("path")
+            .attr('class', unique + "-" + opt_names[i] + '-toggle')
+            .style("stroke", "black")
+            .attr("stroke-width", "1.5px")
+            .style('fill', 'none')
+            .attr('d', p)
+            .attr('visibility', 'hidden');
+        
+        cum_sum += props[i];
+    }
+}
+
+function drawPOC() {
+    const svg = d3.select('#poc-svg');
+    svg.selectAll("*").remove();
+    var width = svg.node().getBoundingClientRect().width;
+    var height = svg.node().getBoundingClientRect().height;
+
+    svg.append("text")
+        .text("?")
+        .attr('font-weight', '700')
+        .attr('font-size', '150pt')
+        .attr('font-family', 'bebasneue')
+        .attr('text-anchor', 'end')
+        .attr('fill', '#ddd')
+        .attr('x', width * 0.95)
+        .attr('y', height - 20);
+    svg.append("text")
+        .text("Do you think the dorm you live in influences how you are perceived on campus?")
+        .attr('font-weight', '700')
+        .attr('font-size', '18pt')
+        .attr('x', 0)
+        .attr('y', 40)
+        .call(wrap, width - 50);
+
+    var barY = 100;
+    var barH = 50;
+    var bar_left = 1.5;
+    var bar_right = width - 1.5;
+
+    var opt_names = ["Yes", "Somewhat", "No"];
+    var show = [true, false, true];
+    var props = [0.53, 0.13, 0.34];
+    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'poc');
+}
+
 window.onload = function () {
     drawCHS();
     drawTTY();
+    drawPOC();
 }

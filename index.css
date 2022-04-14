@@ -152,3 +152,8 @@ audio {
     font-size: 12pt;
     text-align: right;
 }
+
+.caption {
+    text-align:center;
+    text-indent: 0;
+}
