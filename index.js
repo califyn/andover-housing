@@ -444,6 +444,7 @@ function drawTTY() {
             dists.push((focused_years[i] - yr) ** 2);
         }
         focused_years[dists.indexOf(Math.min(...dists))] = yr;
+        focused_years.sort();
         setHistoryPanel();
     }
     setHistoryPanel();
@@ -793,8 +794,9 @@ function drawIFG() {
     var opt_names = ["Yes", "Somewhat", "No"];
     var show = [true, false, true];
     var props = [0.84, 0.06, 0.10];
-    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'poc');
+    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'ifg');
 }
+
 window.onload = function () {
     drawCHS();
     drawTTY();
