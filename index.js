@@ -797,9 +797,97 @@ function drawIFG() {
     drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'ifg');
 }
 
+function drawFDA() {
+    const svg = d3.select('#fda-svg');
+    svg.selectAll("*").remove();
+    var width = svg.node().getBoundingClientRect().width;
+    var height = svg.node().getBoundingClientRect().height;
+
+    svg.append("text")
+        .text("?")
+        .attr('font-weight', '700')
+        .attr('font-size', '150pt')
+        .attr('font-family', 'bebasneue')
+        .attr('text-anchor', 'end')
+        .attr('fill', '#ddd')
+        .attr('x', width * 0.95)
+        .attr('y', height - 20);
+    svg.append("text")
+        .text("from the survey")
+        .attr('font-weight', '400')
+        .attr('font-size', '13pt')
+        .attr('fill', '#333')
+        .attr('text-anchor', 'end')
+        .attr('x', width)
+        .attr('y', height - 20)
+        .call(wrap, width - 50);
+    svg.append("text")
+        .text("What factor do you think most influenced your dorm assignment?")
+        .attr('font-weight', '700')
+        .attr('font-size', '18pt')
+        .attr('x', 0)
+        .attr('y', 50)
+        .call(wrap, width - 50);
+
+    var barY = 100;
+    var barH = 50;
+    var bar_left = 1.5;
+    var bar_right = width - 1.5;
+
+    var opt_names = ["Friends", "Proctor/Prefect", "9/10 dorm", "Cluster", "Did not listen to my preferences"];
+    var show = [true, true, true, true, false];
+    var props = [0.37, 0.30, 0.18, 0.13, 0.02];
+    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'fda');
+}
+
+function drawATN() {
+    const svg = d3.select('#atn-svg');
+    svg.selectAll("*").remove();
+    var width = svg.node().getBoundingClientRect().width;
+    var height = svg.node().getBoundingClientRect().height;
+
+    svg.append("text")
+        .text("?")
+        .attr('font-weight', '700')
+        .attr('font-size', '150pt')
+        .attr('font-family', 'bebasneue')
+        .attr('text-anchor', 'end')
+        .attr('fill', '#ddd')
+        .attr('x', width * 0.95)
+        .attr('y', height - 20);
+    svg.append("text")
+        .text("from the survey")
+        .attr('font-weight', '400')
+        .attr('font-size', '13pt')
+        .attr('fill', '#333')
+        .attr('text-anchor', 'end')
+        .attr('x', width)
+        .attr('y', height - 20)
+        .call(wrap, width - 50);
+    svg.append("text")
+        .text("Do you feel your dorm assignment is accurate to your wants/needs in the housing process?")
+        .attr('font-weight', '700')
+        .attr('font-size', '18pt')
+        .attr('x', 0)
+        .attr('y', 50)
+        .call(wrap, width - 50);
+
+    var barY = 100;
+    var barH = 50;
+    var bar_left = 1.5;
+    var bar_right = width - 1.5;
+
+    var opt_names = ["Yes", "Somewhat", "No"];
+    var show = [true, false, true];
+    var props = [0.73, 0.09, 0.18];
+    drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'atn');
+}
+
 window.onload = function () {
     drawCHS();
     drawTTY();
     drawPOC();
     drawIFG();
+    drawFDA();
+    drawATN();
 }
