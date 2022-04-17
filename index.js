@@ -255,10 +255,6 @@ function drawTTY() {
         }
 
         if (focused_years.includes(i)) {
-            console.log(i);
-            console.log('original');
-            //thisyear.outercirc.style("stroke", "black");
-            //thisyear.innercirc.style("fill", "black");
             thisyear.text.attr('font-weight', '700');
             thisyear.text.attr('fill', 'black');
         } else {
@@ -465,7 +461,6 @@ function drawTTY() {
             .attr("d", path)
             .lower());
     }
-    console.log(connectors);
 }
 
 function drawCHS() {
@@ -651,17 +646,43 @@ function toggleBar(elem, to) {
 
 function drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, unique) {
     var cum_sum = 0;
-    var cols = ["#e27d60", "#85d0cb", "#e8a87c", "#c38d9e", "#41b3a3"];
+    var cols = ["#41b3a3", "#c38d9e", "#e27d60", "#e8a87c", "#85d0cb"];
+    var cols_trans = [];
+    var cols_trans2 = [];
+    for (var i = 0; i < cols.length; i++) {
+        cols_trans.push(d3.rgb(cols[i]));
+        cols_trans[i].opacity = 0.6;
+        cols_trans2.push(d3.interpolateRgb(cols[i], "#ffffff")(0.95));
+        cols_trans2[i].opacity = 0.8;
+        cols[i] = d3.rgb(cols[i]).darker();
+    }
+
+    var text_elem = svg.append('g');
     var bar_elem = svg.append('g');
     for (var i = 0; i < props.length; i++) {
+        var classname = opt_names[i].search(/[^A-Za-z]/);
+        if (classname == -1) {
+            classname = opt_names[i].length;
+        }
+        var classname = opt_names[i].substring(0, classname);
+
+        if (show[i]) {
+            text_elem.append("text")
+                .attr("x", bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2))
+                .attr("y", barY + barH / 2 + 5)
+                .attr("fill", cols[i])
+                .attr('font-family', 'bebasneue')
+                .attr("text-anchor", 'middle')
+                .text(opt_names[i]);
+        }
+
         bar_elem.append("rect")
-            .attr('class', unique + "-" + opt_names[i])
+            .attr('class', unique + "-" + classname)
             .attr("x", bar_left + (bar_right - bar_left) * cum_sum)
             .attr("y", barY)
             .attr("width", (bar_right - bar_left) * props[i])
             .attr("height", barH)
-            .attr("fill", cols[i % cols.length])
-            .attr('stroke', 'black')
+            .attr("fill", cols_trans[i % cols.length]) .attr('stroke', cols[i % cols.length])
             .attr('stroke-width', '0px')
             .on('mouseover', function () {
                 d3.select(this).attr('stroke-width', '1.5px').raise();
@@ -670,36 +691,42 @@ function drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props
                 d3.select(this).attr('stroke-width', '0px').lower();
                 toggleBar(d3.select(this), 'off'); 
             });
-        if (show[i]) {
-            svg.append("text")
-                .attr("x", bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2))
-                .attr("y", barY + barH / 2 + 5)
-                .attr('font-family', 'bebasneue')
-                .attr("text-anchor", 'middle')
-                .text(opt_names[i]);
-        }
 
         var label = svg.append("text")
-            .attr('class', unique + "-" + opt_names[i] + '-toggle')
+            .attr('class', unique + "-" + classname + '-toggle')
             .text(opt_names[i] + ": " + Math.round(props[i] * 100) + '%')
             .attr("x", bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2))
             .attr("y", barY + barH + 30)
             .attr("text-anchor", "middle")
             .attr('visibility', 'hidden');
         var bbox = label.node().getBBox();
-        var p = d3.path();
         var bx = bar_left + (bar_right - bar_left) * (cum_sum + props[i] / 2);
         var by = barY + barH;
+        var p = d3.path();
         p.moveTo(bx, by);
         p.lineTo(bx - 5, bbox.y);
         p.lineTo(bbox.x - 5, bbox.y);
-        p.lineTo(bbox.x - 5, bbox.y + bbox.height);
-        p.lineTo(bbox.x + bbox.width + 5, bbox.y + bbox.height);
-        p.lineTo(bbox.x + bbox.width + 5, bbox.y);
+        //p.lineTo(bbox.x - 5, bbox.y + bbox.height);
+        //p.lineTo(bbox.x + bbox.width + 5, bbox.y + bbox.height);
+        p.moveTo(bbox.x + bbox.width + 5, bbox.y);
         p.lineTo(bx + 5, bbox.y);
         p.lineTo(bx, by);
+        var p_full = d3.path();
+        p_full.moveTo(bx, by);
+        p_full.lineTo(bx - 5, bbox.y);
+        p_full.lineTo(bbox.x - 5, bbox.y);
+        p_full.lineTo(bbox.x - 5, bbox.y + bbox.height);
+        p_full.lineTo(bbox.x + bbox.width + 5, bbox.y + bbox.height);
+        p_full.lineTo(bbox.x + bbox.width + 5, bbox.y);
+        p_full.lineTo(bx + 5, bbox.y);
+        p_full.lineTo(bx, by);
         svg.append("path")
-            .attr('class', unique + "-" + opt_names[i] + '-toggle')
+            .attr('class', unique + "-" + classname + '-toggle')
+            .style('fill', cols_trans2[i])
+            .attr('d', p_full)
+            .attr('visibility', 'hidden');
+        svg.append("path")
+            .attr('class', unique + "-" + classname + '-toggle')
             .style("stroke", "black")
             .attr("stroke-width", "1.5px")
             .style('fill', 'white')
@@ -728,7 +755,7 @@ function drawPOC() {
         .attr('y', height - 20);
     svg.append("text")
         .text("from the survey")
-        .attr('font-weight', '400')
+        .attr('font-weight', '700')
         .attr('font-size', '13pt')
         .attr('fill', '#333')
         .attr('text-anchor', 'end')
@@ -737,16 +764,15 @@ function drawPOC() {
         .call(wrap, width - 50);
     svg.append("text")
         .text("Do you think the dorm you live in influences how you are perceived on campus?")
-        .attr('font-weight', '700')
         .attr('font-size', '18pt')
-        .attr('x', 0)
+        .attr('x', 50)
         .attr('y', 50)
-        .call(wrap, width - 50);
+        .call(wrap, width - 100);
 
     var barY = 100;
     var barH = 50;
-    var bar_left = 1.5;
-    var bar_right = width - 1.5;
+    var bar_left = 50;
+    var bar_right = width - 50;
 
     var opt_names = ["Yes", "Somewhat", "No"];
     var show = [true, false, true];
@@ -771,7 +797,7 @@ function drawIFG() {
         .attr('y', height - 20);
     svg.append("text")
         .text("from the survey")
-        .attr('font-weight', '400')
+        .attr('font-weight', '700')
         .attr('font-size', '13pt')
         .attr('fill', '#333')
         .attr('text-anchor', 'end')
@@ -780,16 +806,15 @@ function drawIFG() {
         .call(wrap, width - 50);
     svg.append("text")
         .text("Do you think the dorm you live in influences friends/social circles?")
-        .attr('font-weight', '700')
         .attr('font-size', '18pt')
-        .attr('x', 0)
+        .attr('x', 50)
         .attr('y', 50)
-        .call(wrap, width - 50);
+        .call(wrap, width - 100);
 
     var barY = 100;
     var barH = 50;
-    var bar_left = 1.5;
-    var bar_right = width - 1.5;
+    var bar_left = 50;
+    var bar_right = width - 50;
 
     var opt_names = ["Yes", "Somewhat", "No"];
     var show = [true, false, true];
@@ -814,7 +839,7 @@ function drawFDA() {
         .attr('y', height - 20);
     svg.append("text")
         .text("from the survey")
-        .attr('font-weight', '400')
+        .attr('font-weight', '700')
         .attr('font-size', '13pt')
         .attr('fill', '#333')
         .attr('text-anchor', 'end')
@@ -823,18 +848,17 @@ function drawFDA() {
         .call(wrap, width - 50);
     svg.append("text")
         .text("What factor do you think most influenced your dorm assignment?")
-        .attr('font-weight', '700')
         .attr('font-size', '18pt')
-        .attr('x', 0)
+        .attr('x', 50)
         .attr('y', 50)
-        .call(wrap, width - 50);
+        .call(wrap, width - 100);
 
     var barY = 100;
     var barH = 50;
-    var bar_left = 1.5;
-    var bar_right = width - 1.5;
+    var bar_left = 50;
+    var bar_right = width - 50;
 
-    var opt_names = ["Friends", "Proctor/Prefect", "9/10 dorm", "Cluster", "Did not listen to my preferences"];
+    var opt_names = ["Friends", "Proctor or Prefect", "9-10 dorm", "Cluster", "None"];
     var show = [true, true, true, true, false];
     var props = [0.37, 0.30, 0.18, 0.13, 0.02];
     drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'fda');
@@ -857,7 +881,7 @@ function drawATN() {
         .attr('y', height - 20);
     svg.append("text")
         .text("from the survey")
-        .attr('font-weight', '400')
+        .attr('font-weight', '700')
         .attr('font-size', '13pt')
         .attr('fill', '#333')
         .attr('text-anchor', 'end')
@@ -866,16 +890,15 @@ function drawATN() {
         .call(wrap, width - 50);
     svg.append("text")
         .text("Do you feel your dorm assignment is accurate to your wants/needs in the housing process?")
-        .attr('font-weight', '700')
         .attr('font-size', '18pt')
-        .attr('x', 0)
+        .attr('x', 50)
         .attr('y', 50)
-        .call(wrap, width - 50);
+        .call(wrap, width - 100);
 
     var barY = 100;
     var barH = 50;
-    var bar_left = 1.5;
-    var bar_right = width - 1.5;
+    var bar_left = 50;
+    var bar_right = width - 50;
 
     var opt_names = ["Yes", "Somewhat", "No"];
     var show = [true, false, true];
