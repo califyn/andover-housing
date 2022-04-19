@@ -45,6 +45,34 @@ function toggleSplash() {
 }
 setInterval(toggleSplash, 500);
 
+function tocFix () {
+    if (window.innerWidth < 1250) {
+      var element = document.getElementById("toc");
+      if (element.classList[0] != "toc-overlay") {
+        element.style.visibility = "hidden";
+        document.getElementById('toc-menu').style.visibility = 'visible';
+      }
+      element.classList = new Array("toc-overlay");
+    } else {
+        document.getElementById('toc').style.visibility = "visible";
+        var element = document.getElementById("footer");
+        var rect = element.getBoundingClientRect();
+        var sideHeight = document.getElementById("toc").getBoundingClientRect().height;
+        var height = window.innerHeight;
+        if (0 < height - rect.y) {
+          element = document.getElementById("toc");
+          element.classList = new Array("toc-fixed");
+        } else {
+          element = document.getElementById("toc");
+          element.classList = new Array("toc-dynamic");
+        }
+        document.getElementById('toc-x').style.visibility = 'hidden';
+        document.getElementById('toc-menu').style.visibility = 'hidden';
+    }
+}
+
+setInterval(tocFix, 50);
+
 function getIndex(arr, num) {
   return arr.concat(num).sort(function(a, b) {
     return a - b;
@@ -906,11 +934,49 @@ function drawATN() {
     drawStaggeredBar(svg, barY, barH, bar_left, bar_right, opt_names, props, show, 'atn');
 }
 
-window.onload = function () {
+function drawSVGs() {
     drawCHS();
     drawTTY();
     drawPOC();
     drawIFG();
     drawFDA();
     drawATN();
+}
+
+window.onload = function () {
+    tocFix();
+    drawSVGs();
+    window.addEventListener('resize', drawSVGs);
+
+    var x = document.getElementById('toc-x');
+    var menu = document.getElementById('toc-menu');
+
+    x.addEventListener('mouseover', function () {
+        x.src = "assets/x-blue.svg";
+        document.body.style.cursor = "pointer";
+    }, false);
+    x.addEventListener('mouseout', function () {
+        x.src = "assets/x.svg";
+        document.body.style.cursor = "default";
+    }, false);
+
+    menu.addEventListener('mouseover', function () {
+        menu.src = "assets/menu-blue.svg";
+        document.body.style.cursor = "pointer";
+    }, false);
+    menu.addEventListener('mouseout', function () {
+        menu.src = "assets/menu.svg";
+        document.body.style.cursor = "default";
+    }, false);
+
+    x.addEventListener('click', function () {
+        document.getElementById('toc').style.visibility = 'hidden';
+        x.style.visibility = 'hidden';
+        menu.style.visibility = 'visible';
+    });
+    menu.addEventListener('click', function () {
+        document.getElementById('toc').style.visibility = 'visible';
+        x.style.visibility = 'visible';
+        menu.style.visibility = 'hidden';
+    });
 }

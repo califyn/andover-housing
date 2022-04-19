@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'cardo';
     src: url('fonts/cardo-regular-webfont.woff2') format('woff2'),
@@ -32,9 +33,7 @@
 
 body {
     font-family: cardo;
-    padding-left: 50px;
-    padding-right: 50px;
-    margin-top: 0px;
+    margin: 0px;
 
     --primary-color: #e27d60;
     --secondary-color: #85d0cb;
@@ -42,10 +41,27 @@ body {
     --background-color: #fff;
 }
 
+html {
+    background-color: var(--secondary-color);
+}
+
 #main {
     max-width: 625px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: calc(67vw - 417px);
+    margin-right: calc(33vw - 213px);
+    position: relative;
+}
+
+@media only screen and (max-width: 1250px) {
+    #main {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    body {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
 }
 
 #splashwrap {
@@ -88,6 +104,81 @@ h1 {
     margin-bottom: 1em;
 }
 
+.toc-fixed {
+    width: calc(calc(calc(100vw - 625px) * 0.5) - 82.5px);
+    position: absolute;
+    bottom: -50px;
+    left: calc(437px - 67vw);
+}
+
+.toc-dynamic {
+    width: calc(calc(calc(100vw - 625px) * 0.5) - 82.5px);
+    position: fixed;
+    left: 20px;
+    bottom: 50px;
+}
+
+.toc-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: calc(100vw - 40px);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    z-index: 99;
+}
+
+.toc-overlay hr {
+    display: none;
+}
+
+#toc-menu, #toc-x {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.toc-overlay, #toc-x {
+    visibility: hidden;
+}
+
+#toc-menu {
+    visibility: hidden;
+}
+
+.toc-elem {
+    line-height: 1.0;
+    text-indent: 0;
+}
+
+.toc-elem a {
+    text-decoration: none;
+}
+
+.toc-elem a:hover {
+    text-decoration: underline;
+    color: var(--secondary-color);
+}
+
+.toc-header-1 {
+    font-weight: 700;
+}
+
+.toc-header-2 {
+}
+
+.toc-header-3 {
+    padding-left: 2em;
+    font-size: 10pt;
+}
+
+.toc-header-3 a {
+    color: var(--primary-color);
+}
+
 h3 {
     font-variant: small-caps;
     letter-spacing: 3px;
@@ -108,13 +199,13 @@ a {
     text-underline-offset: 0.1em;
     text-decoration-height: 4px;
     display: inline-block;
+    text-indent: 0;
 
     text-decoration-color: var(--primary-color);
 }
 
 a:hover {
     text-decoration-color: var(--secondary-color);
-    background-color: var(--background-color);
 }
 
 #through-the-years {
@@ -156,3 +247,21 @@ audio {
     text-align:center;
     text-indent: 0;
 }
+
+footer {
+    margin-top: 100px;
+    width: 100%;
+    background-color: var(--secondary-color);
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+}
+
+footer p {
+    font-family: 'bebasneue';
+}
+
+footer a:hover {
+    text-decoration-color: #41b3a3;
+}
+
