@@ -252,9 +252,10 @@ footer {
     margin-top: 100px;
     width: 100%;
     background-color: var(--secondary-color);
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 25px;
+    padding-bottom: 25px;
     text-align: center;
+    margin-bottom: 50px;
 }
 
 footer p {
