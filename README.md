@@ -1,6 +1,6 @@
 # Andover Housing
 
-This website was made by a group at [https://tanginstitute.andover.edu/ourwork/school-within-a-school](the Workshop) to report on trends on housing in Phillips Academy, a New England boarding school.
+This website was made by a group at [the Workshop](https://tanginstitute.andover.edu/ourwork/school-within-a-school) to report on trends on housing in Phillips Academy, a New England boarding school.
 
 ## Technical details
 
